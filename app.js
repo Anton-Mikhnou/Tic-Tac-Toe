@@ -6,51 +6,44 @@ const GameBord = {
     ],
 } 
 
-// function usersCreate (name, chose) {
-//     return {
-//         name: name,
-//         chose: chose,
-//         info: function getInfo() {
-//             console.log(`${name} im chose: ${chose}`)
-//             return `${name} im chose: ${chose}` 
-//         }
-//     }
-// }
+const namePlayerOne = document.querySelector('#playerOne');
+const namePlayerTwo = document.querySelector('#playerTwo');
 
-const usersCreate = (function (doc,) {
-    // let choses;
-    // let name;
-    const getFromDom = (selector) => {
-        if(!!doc && "querySelector" in doc){ 
-            let shoses = doc.querySelector(selector).textContent;
-            player1.shose = shoses;
-            console.log(player1.shose)
-            return player1.shose;
-        }
-    }
+function usersCreate (name, shose) {
+    return {name, shose}
+}
 
-    const player1 = {
-        name: name,
-        chose: chose,
-    }
-
-    const player2 = {
-        name: name,
-        chose: chose,
-    }
-
-    return {
-        getFromDom,
-        player1,
-        player2,
-    }
-})(document);
-
-const button = document.querySelector('.zero');
-button.addEventListener('click', () => {
-    usersCreate.getFromDom('.zero')
+const buttonZero = document.querySelectorAll('.zero');
+buttonZero.forEach((button) => {
+    button.addEventListener('click', () => {
+        const shose1 = button.textContent;
+        usersCreate(name, shose1);
+        console.log(usersCreate(name, shose1))
+    })
 })
 
+const buttonX = document.querySelectorAll('.cross');
+buttonX.forEach((button) => {
+    button.addEventListener('click', () => {
+        // const shose1 = button.textContent;
+        // usersCreate(name, shose1);
+        // console.log(usersCreate(name, shose1))
+    })
+})
+
+const formOne = document.getElementById('formOne');
+
+function addValueToUser() {
+    
+}
+
+formOne.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // const nameOne = namePlayerOne.Value;
+    // let chose1 = 1;
+    usersCreate(nameOne, shose1)
+    console.log(usersCreate(nameOne, shose1))
+})
 
 
 
