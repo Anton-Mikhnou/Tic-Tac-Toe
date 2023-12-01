@@ -6,8 +6,8 @@ const gamePlace = {
     ]
 }
 
-const userOneInfo = {}
-const userTwoInfo = {}
+const userOneInfo = {};
+const userTwoInfo = {};
 
 function createUsers (name) {
     return {
@@ -15,22 +15,22 @@ function createUsers (name) {
     };
 }
 
-function addNameInObj(){
+function addNameInObj() {
     const userOne = document.getElementById('userOne');
     const nameUserOne = createUsers(userOne.value);
-
     userOneInfo.name = nameUserOne.name;
-
-    const userNameOne = document.getElementById('userNameOne');
-    userNameOne.textContent = nameUserOne.name;
-
+    
     const userTwo = document.getElementById('userTwo');
     const nameUserTwo = createUsers(userTwo.value);
-
     userTwoInfo.name = nameUserTwo.name;
+}
+
+function addNameToPage() {
+    const userNameOne = document.getElementById('userNameOne');
+    userNameOne.textContent = userOneInfo.name;
 
     const userNameTwo = document.getElementById('userNameTwo');
-    userNameTwo.textContent = nameUserTwo.name;
+    userNameTwo.textContent = userTwoInfo.name;
 }
 
 const form = document.getElementById('form');
@@ -38,6 +38,7 @@ const form = document.getElementById('form');
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     addNameInObj();
+    addNameToPage()
     console.log(userOneInfo)
     console.log(userTwoInfo)
 })
