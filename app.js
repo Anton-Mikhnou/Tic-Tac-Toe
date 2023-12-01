@@ -1,4 +1,4 @@
-gamePlace = {
+const gamePlace = {
     game: [
         '', '', '',
         '', '', '',
@@ -6,9 +6,8 @@ gamePlace = {
     ]
 }
 
-// const userOne = document.getElementById('userOne');
-// let userNameOne = document.getElementById('userNameOne');
-
+const userOneInfo = {}
+const userTwoInfo = {}
 
 function createUsers (name) {
     return {
@@ -16,31 +15,29 @@ function createUsers (name) {
     };
 }
 
-const submit = document.getElementById('formOne');
+function addNameInObj(){
+    const userOne = document.getElementById('userOne');
+    const nameUserOne = createUsers(userOne.value);
 
-function addUserNameToBoard(){
-    // const userOne = document.getElementById('userOne');
-    const userOne = document.getElementById('userOne').value;
-    const userTwo = document.getElementById('userTwo').value
+    userOneInfo.name = nameUserOne.name;
 
-    let userNameOne = document.getElementById('userNameOne');
-    // userNameOne.textContent = nameOne;
-    let userNameTwo = document.getElementById('userNmaetWO')
-    // userNameTwo = nameTwo;
-    const add = createUsers(`${userOne}`)
-    const add2 = createUsers(`${userTwo}`)
-    userNameOne = add;
-    userNameTwo = add2;
+    const userNameOne = document.getElementById('userNameOne');
+    userNameOne.textContent = nameUserOne.name;
+
+    const userTwo = document.getElementById('userTwo');
+    const nameUserTwo = createUsers(userTwo.value);
+
+    userTwoInfo.name = nameUserTwo.name;
+
+    const userNameTwo = document.getElementById('userNameTwo');
+    userNameTwo.textContent = nameUserTwo.name;
 }
 
+const form = document.getElementById('form');
 
-submit.addEventListener('click', (e) => {
+form.addEventListener('submit', (e) => {
     e.preventDefault();
-    addUserNameToBoard()
-    // createUsers(e)
-    console.log('user:', createUsers(e));
-    console.log('name:', addUserNameToBoard(e));
+    addNameInObj();
+    console.log(userOneInfo)
+    console.log(userTwoInfo)
 })
-
-// const add = createUsers("Anton")
-// console.log(add)
