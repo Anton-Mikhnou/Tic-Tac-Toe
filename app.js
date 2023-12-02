@@ -68,21 +68,24 @@ function strokeChange() {
 
 const item = document.querySelectorAll('.item');
 
-function fillAnObject() {
+function fillAnObject(item) {
+    // strokeChange();
     let arr = gamePlace.game;
-    for (let i = 0; i < arr.length -1; i++) {
-        // if (arr[i] == item.id){
-        //     arr.splice(1, 1, '1');
-        // }
-        arr.splice(arr[i], 1, '1')
+    for (let i = 0; i < arr.length; i++) {
+        if (strokeChange() % 2 === 0) {
+            arr.splice(item.id, 1, 'O');
+            item.textContent = 'O';
+        } else {
+            arr.splice(item.id, 1, 'x')
+            item.textContent = 'X';
+        }
     }
-    // for( let i = 0; i<)
 }
 
 item.forEach((item) => {
     item.addEventListener('click', () => {
-        console.log('value:',strokeChange());
-        fillAnObject();
+        // console.log('value:',strokeChange());
+        fillAnObject(item);
         console.log(gamePlace);
     })
 })
