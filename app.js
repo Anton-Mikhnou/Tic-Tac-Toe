@@ -9,18 +9,19 @@ const gamePlace = {
 const userOneInfo = {};
 const userTwoInfo = {};
 
-function createUsers (name) {
+function createUsers (name, token) {
     return {
         name,
+        token,
     };
 }
 
 function addNameInObj() {
     const userOne = document.getElementById('userOne');
-    const nameUserOne = createUsers(userOne.value);
+    const nameUserOne = createUsers(userOne.value, '1');
     userOneInfo.name = nameUserOne.name;
     
-    const userTwo = document.getElementById('userTwo');
+    const userTwo = document.getElementById('userTwo', '2');
     const nameUserTwo = createUsers(userTwo.value);
     userTwoInfo.name = nameUserTwo.name;
 }
@@ -68,16 +69,41 @@ function strokeChange() {
 
 const item = document.querySelectorAll('.item');
 
-function fillAnObject(item) {
-    // strokeChange();
-    let arr = gamePlace.game;
+function fillAnObject (item) {
+    const arr = gamePlace.game;
+    // const newArr = arr.filter((arri) => arri === '');
     for (let i = 0; i < arr.length; i++) {
+        // if (strokeChange() % 2 === 0) {
+        //     newArr.splice(item.id, 1, 'o');
+        //     newArr.addSign()
+        // } else {
+        //     newArr.splice(item.id, 1, 'x');
+        // }
         if (strokeChange() % 2 === 0) {
-            arr.splice(item.id, 1, 'O');
-            item.textContent = 'O';
+            arr.splice(item.id, 1, 'o');
+            // arr.addSign()
         } else {
-            arr.splice(item.id, 1, 'x')
-            item.textContent = 'X';
+            arr.splice(item.id, 1, 'x');
+        }
+    }
+}
+
+const players = [
+
+]
+
+// function addToDom() {
+//     const gemeBoard = gamePlace.game;
+//     const newGameBoard = gameBoard.map()
+// }
+
+function addZeroOrCross (item) {
+    const arr = gamePlace.game;
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === 'x'){
+            item.textContent = 'x';
+        } else if (arr[i] === 'o') {
+            item.textContent = 'o';
         }
     }
 }
@@ -87,5 +113,6 @@ item.forEach((item) => {
         // console.log('value:',strokeChange());
         fillAnObject(item);
         console.log(gamePlace);
+        addZeroOrCross(item);
     })
 })
