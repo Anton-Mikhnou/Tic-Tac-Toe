@@ -83,8 +83,15 @@ form{
     user-select: none;
 }
 
-.item:hover{
+.item:hover {
     background-color:  rgb(217 90 6);
+}
+
+.activePlayer {
+    width: 200px;
+    height: 30px;
+    background-color: blueviolet;
+    border: 2px solid gold;
 }
 
 
