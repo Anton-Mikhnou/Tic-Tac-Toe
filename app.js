@@ -1,92 +1,97 @@
 const gameBoard = {
-    game: [
+    board: [
         '', '', '',
         '', '', '',
-        '', '', '',
+        '', '', ''
     ]
 }
 
+function createUser () {
+    const playerOne = document.getElementById('userOne').value;
+    const playerTwo = document.getElementById('userTwo').value;
 
-
-function gameControl () {
-    const item = document.querySelectorAll('item');
-    const playerNameOne = document.getElementById('userOne');
-    const playerNameTwo = document.getElementById('userTwo');
     const players = [
         {
-            name: playerNameOne.value,
-            token: '1',
+            name: playerOne,
+            token: 'x',
         },
         {
-            name: playerNameTwo.value,
-            token: '2',
+            name: playerTwo,
+            token: 'o',
         }
-    ]
+    ];
+    return {
+        players,
+    }
+}
 
-    let activePlayer = players[0];
+function gameControl () {
 
-    function indentifyTurn () {
-        if (activePlayer === players[0]) {
-            return players[1];
+    const user = createUser();
+
+    let activePlayer = user.players[0];
+    
+    const changeTurn = () => {
+        if (activePlayer === user.players[0]) {
+            activePlayer = user.players[1];
         } else {
-            return players[0];
+            activePlayer = user.players[0];
         }
     }
-
-    const userNameOne = document.getElementById('userNameOne');
-    const userNameTwo = document.getElementById('userNameTwo');
-
-    userNameOne.textContent = players[0].name;
-    userNameTwo.textContent = players[1].name;
 
     const getActivePlayer = () => activePlayer;
-    
-    const addMarker = () => {
-        if(getActivePlayer === players[0]){
-            userNameTwo.classList.remove('activePlayer');
-            userNameOne.classList.add('activePlayer');
+
+    const playerOneName = document.getElementById('userNameOne');
+    const playerTwoName = document.getElementById('userNameTwo');
+    playerOneName.textContent = user.players[0].name;
+    playerTwoName.textContent = user.players[1].name;
+
+    function printActivePlayer () {
+        if (getActivePlayer() === user.players[0]) {
+            playerOneName.classList.add('activePlayer');
+            playerTwoName.classList.remove('activePlayer');
         } else {
-            userNameOne.classList.remove('activePlayer');
-            userNameTwo.classList.add('activePlayer');
+            playerTwoName.classList.add('activePlayer');
+            playerOneName.classList.remove('activePlayer');
         }
     }
 
-    
-    function pushInObject (item) {
-        const place = gameBoard.game;
-        for (let i = 0; i < place.length; i++) {
-            if (place[i] === item.id) {
-                place.splice(1, 1, activePlayer.token);
+    console.log(`activePlayer: ${getActivePlayer().name}`);
+
+    function pushInArray () {
+        const gamePlace = gameBoard.board;
+        for (let i = 0; i < gamePlace.length; i++) {
+            if (gamePlace[i] === '') {
+                gamePlace.splice(item.id, 1, getActivePlayer().token)
+            } else {
+                return
             }
         }
     }
 
-    item.forEach((item) => {{
-        item.addEventListener('click', () => {
-            gameControl();
-            pushInObject();
-        })
-    }})
-
     return {
-        indentifyTurn,
-        pushInObject,
-        addMarker,
+        changeTurn,
+        pushInArray,
+        printActivePlayer,
+        changeTurn,
+        getActivePlayer,
     }
 
 }
 
-// const item = document.querySelectorAll('item');
-// item.forEach((item) => {{
-//     item.addEventListener('click', () => {
-//         gameControl();
-//         pushInObject();
-//     })
-// }})
+const item = document.querySelectorAll('.item');
+item.forEach((item) => {
+    item.addEventListener('click', () => {
+        const games = gameControl();
+        console.log(games.printActivePlayer())
+        console.log(gameBoard.board)
+    })
+}) 
+// console.log(gameControl().changeTurn())
 
 const form = document.getElementById('form');
-
 form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    console.log(gameControl());
+    e.preventDefault;
+    createUser();
+    gameControl();
 })
