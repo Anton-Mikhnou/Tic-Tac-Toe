@@ -20,6 +20,7 @@ function createUser () {
             token: 'o',
         }
     ];
+
     return {
         players,
     }
@@ -30,15 +31,18 @@ function gameControl () {
     const user = createUser();
 
     let activePlayer = user.players[0];
-    
+
     const changeTurn = () => {
         if (activePlayer === user.players[0]) {
             activePlayer = user.players[1];
         } else {
             activePlayer = user.players[0];
         }
+
     }
 
+    // changeTurn();
+    
     const getActivePlayer = () => activePlayer;
 
     const playerOneName = document.getElementById('userNameOne');
@@ -56,13 +60,12 @@ function gameControl () {
         }
     }
 
-    console.log(`activePlayer: ${getActivePlayer().name}`);
-
     function pushInArray () {
         const gamePlace = gameBoard.board;
         for (let i = 0; i < gamePlace.length; i++) {
             if (gamePlace[i] === '') {
-                gamePlace.splice(item.id, 1, getActivePlayer().token)
+                printActivePlayer();
+                gamePlace.splice(item.id, 1, getActivePlayer().token);
             } else {
                 return
             }
@@ -70,24 +73,26 @@ function gameControl () {
     }
 
     return {
-        changeTurn,
-        pushInArray,
         printActivePlayer,
+        pushInArray,
         changeTurn,
         getActivePlayer,
     }
 
 }
 
+const games = gameControl();
+
 const item = document.querySelectorAll('.item');
 item.forEach((item) => {
     item.addEventListener('click', () => {
-        const games = gameControl();
-        console.log(games.printActivePlayer())
+        games.changeTurn();
+        games.printActivePlayer();
+        console.log(`activePlayer: ${games.getActivePlayer().name}`);
+        console.log(`activePlayer: ${games.getActivePlayer().token}`);
         console.log(gameBoard.board)
     })
 }) 
-// console.log(gameControl().changeTurn())
 
 const form = document.getElementById('form');
 form.addEventListener('submit', (e) => {
