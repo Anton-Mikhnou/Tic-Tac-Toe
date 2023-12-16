@@ -26,6 +26,8 @@ function createUser () {
     }
 }
 
+const item = document.querySelectorAll('.item');
+
 function gameControl () {
 
     const user = createUser();
@@ -38,7 +40,6 @@ function gameControl () {
         } else {
             activePlayer = user.players[0];
         }
-
     }
 
     // changeTurn();
@@ -60,43 +61,47 @@ function gameControl () {
         }
     }
 
-    function pushInArray () {
-        const gamePlace = gameBoard.board;
-        for (let i = 0; i < gamePlace.length; i++) {
-            if (gamePlace[i] === '') {
-                printActivePlayer();
-                gamePlace.splice(item.id, 1, getActivePlayer().token);
-            } else {
-                return
-            }
+    const gamePlace = gameBoard.board;
+    function pushInArray (index) {
+        if (gamePlace[index] === '') {
+            gamePlace.splice(index, 1, getActivePlayer().token);
+            printActivePlayer();
+        } else {
+            return;
         }
     }
+    pushInArray()
 
     return {
+        gamePlace,
         printActivePlayer,
         pushInArray,
         changeTurn,
         getActivePlayer,
-    }
-
+    };
 }
+
+
+
+
 
 const games = gameControl();
 
-const item = document.querySelectorAll('.item');
-item.forEach((item) => {
+// const item = document.querySelectorAll('.item');
+item.forEach((item, index) => {
     item.addEventListener('click', () => {
         games.changeTurn();
         games.printActivePlayer();
+        games.pushInArray(index);
         console.log(`activePlayer: ${games.getActivePlayer().name}`);
         console.log(`activePlayer: ${games.getActivePlayer().token}`);
-        console.log(gameBoard.board)
+        console.log(games.gamePlace);
     })
 }) 
 
 const form = document.getElementById('form');
 form.addEventListener('submit', (e) => {
-    e.preventDefault;
+    e.preventDefault();
     createUser();
     gameControl();
 })
