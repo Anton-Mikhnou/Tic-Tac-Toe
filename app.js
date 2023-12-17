@@ -26,7 +26,6 @@ function createUser () {
     }
 }
 
-const item = document.querySelectorAll('.item');
 
 function gameControl () {
 
@@ -65,6 +64,7 @@ function gameControl () {
     function pushInArray (index) {
         if (gamePlace[index] === '') {
             gamePlace.splice(index, 1, getActivePlayer().token);
+            changeTurn()
             printActivePlayer();
         } else {
             return;
@@ -74,25 +74,56 @@ function gameControl () {
 
     return {
         gamePlace,
-        printActivePlayer,
         pushInArray,
-        changeTurn,
         getActivePlayer,
     };
 }
 
-
-
-
-
 const games = gameControl();
 
-// const item = document.querySelectorAll('.item');
+function  screenControl() {
+    // const gridBoard = document.querySelector('.gridBoard');
+    function addToken() {
+        for (let i = 0; i < games.gamePlace.length; i++) {
+            if (games.gamePlace[i] !== '') {
+                // gridBoard.innerHTML = '';
+                item.textContent = games.gamePlace[i];
+            }
+        }   
+    }
+    addToken()
+    return {
+        addToken,
+    }
+}
+
+function createGrid () {
+    const gridBoard = document.querySelector('.gridBoard');
+    const row = 3;
+    const column = 3;
+
+    function createGridElement() {
+        for( let i = 0; i < row*column; i++) {
+            gridDiv = document.createElement('div');
+            gridDiv.classList.add('item');
+            gridDiv.id = i;
+            gridBoard.appendChild(gridDiv);
+        }
+    }
+    createGridElement();
+
+    return {
+        createGridElement,
+    }
+}
+createGrid()
+
+
+const item = document.querySelectorAll('.item');
 item.forEach((item, index) => {
     item.addEventListener('click', () => {
-        games.changeTurn();
-        games.printActivePlayer();
         games.pushInArray(index);
+        screenControl()
         console.log(`activePlayer: ${games.getActivePlayer().name}`);
         console.log(`activePlayer: ${games.getActivePlayer().token}`);
         console.log(games.gamePlace);
@@ -105,3 +136,5 @@ form.addEventListener('submit', (e) => {
     createUser();
     gameControl();
 })
+
+
