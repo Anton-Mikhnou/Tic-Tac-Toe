@@ -70,7 +70,7 @@ function gameControl () {
             return;
         }
     }
-    pushInArray()
+    // pushInArray()
 
     return {
         gamePlace,
@@ -81,21 +81,21 @@ function gameControl () {
 
 const games = gameControl();
 
-function  screenControl() {
-    // const gridBoard = document.querySelector('.gridBoard');
-    function addToken() {
-        for (let i = 0; i < games.gamePlace.length; i++) {
-            if (games.gamePlace[i] !== '') {
-                // gridBoard.innerHTML = '';
-                item.textContent = games.gamePlace[i];
-            }
-        }   
-    }
-    addToken()
-    return {
-        addToken,
-    }
-}
+// function  screenControl() {
+//     // const gridBoard = document.querySelector('.gridBoard');
+//     function addToken() {
+//         for (let i = 0; i < games.gamePlace.length; i++) {
+//             if (games.gamePlace[i] !== '') {
+//                 // gridBoard.innerHTML = '';
+//                 // item.textContent = games.gamePlace[i];
+//             }
+//         }   
+//     }
+//     addToken()
+//     return {
+//         addToken,
+//     }
+// }
 
 function createGrid () {
     const gridBoard = document.querySelector('.gridBoard');
@@ -118,15 +118,25 @@ function createGrid () {
 }
 createGrid()
 
+function setTokenOnScreen (event) {
+    const controlBoard = gameBoard.board;
+    for (let i =  0; i < controlBoard.length; i++ ) { 
+        if (controlBoard[i] !== '') {
+            event.target.textContent = controlBoard[i];
+        }
+    }
+}
+
 
 const item = document.querySelectorAll('.item');
 item.forEach((item, index) => {
-    item.addEventListener('click', () => {
+    item.addEventListener('click', (event) => {
         games.pushInArray(index);
-        screenControl()
+        setTokenOnScreen (event)
+        // screenControl();
         console.log(`activePlayer: ${games.getActivePlayer().name}`);
-        console.log(`activePlayer: ${games.getActivePlayer().token}`);
         console.log(games.gamePlace);
+        console.log(gameBoard.board);
     })
 }) 
 
