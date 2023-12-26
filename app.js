@@ -40,8 +40,6 @@ function gameControl () {
             activePlayer = user.players[0];
         }
     }
-
-    // changeTurn();
     
     const getActivePlayer = () => activePlayer;
 
@@ -70,39 +68,84 @@ function gameControl () {
             return;
         }
     }
-    // pushInArray()
 
     return {
         gamePlace,
+        printActivePlayer,
         pushInArray,
         getActivePlayer,
     };
 }
 
-const games = gameControl();
+function winnerDetection () {
+    const game = gameBoard.board;
+    const users = createUser(); 
+    let tokenPlayerOne = 'x';
+    // let tokenPlayerTwo = 'o';
+    
+    function returnWinner () {
+        for (let i = 0; i < 9; i++) {
+            if (game[i] === game[i+1] && game[i] === game[i+2]) {
+                if ( game[i] === tokenPlayerOne) {
+                    return users.players[0].name;
+                } else {
+                    return users.players[1].name;
+                }
+            } else {
+                return 'Nobody';
+            }
+        }
 
-// function  screenControl() {
-//     // const gridBoard = document.querySelector('.gridBoard');
-//     function addToken() {
-//         for (let i = 0; i < games.gamePlace.length; i++) {
-//             if (games.gamePlace[i] !== '') {
-//                 // gridBoard.innerHTML = '';
-//                 // item.textContent = games.gamePlace[i];
-//             }
-//         }   
-//     }
-//     addToken()
-//     return {
-//         addToken,
-//     }
-// }
+        for (let i = 0; i <= 2; i++) {
+            if (game[i] === game[i+3] && game[i] === game[i+6]) {
+                if ( game[i] === tokenPlayerOne) {
+                    return users.players[0].name;
+                } else {
+                    return users.players[1].name;
+                }
+            } else {
+                return 'Nobody';
+            }
+        }
 
-function createGrid () {
+        if (game[0] === game[4] && game[0] === game[7] || game[2] === game[4] && game[2] === game[6]) {
+            if ( game[0] === tokenPlayerOne || game[2] === tokenPlayerOne) {
+                return users.players[0].name;
+            } else {
+                return users.players[1].name;
+            }
+        } else { 
+            return 'Nobody'
+        }
+
+    }
+    // returnWinner()
+    // console.log(users.players)
+    
+    return {
+       returnWinner,
+    }
+}
+
+function addWinnerSyle () {
+    const winnerDet = winnerDetection()
+    if (winnerDet.returnWinner === 'Nobody') {
+        
+    }
+}
+
+
+
+function screen () {
+    const controlBoard = gameBoard.board;
+    // const user1 = createUser();
+    const games = gameControl();
+
     const gridBoard = document.querySelector('.gridBoard');
     const row = 3;
     const column = 3;
 
-    function createGridElement() {
+    function createGridElements () {
         for( let i = 0; i < row*column; i++) {
             gridDiv = document.createElement('div');
             gridDiv.classList.add('item');
@@ -110,41 +153,45 @@ function createGrid () {
             gridBoard.appendChild(gridDiv);
         }
     }
-    createGridElement();
+    createGridElements();
 
-    return {
-        createGridElement,
-    }
-}
-createGrid()
+    const item = document.querySelectorAll('.item');
 
-function setTokenOnScreen (event) {
-    const controlBoard = gameBoard.board;
-    for (let i =  0; i < controlBoard.length; i++ ) { 
-        if (controlBoard[i] !== '') {
-            event.target.textContent = controlBoard[i];
-        }
-    }
-}
-
-
-const item = document.querySelectorAll('.item');
-item.forEach((item, index) => {
-    item.addEventListener('click', (event) => {
-        games.pushInArray(index);
-        setTokenOnScreen (event)
-        // screenControl();
-        console.log(`activePlayer: ${games.getActivePlayer().name}`);
-        console.log(games.gamePlace);
-        console.log(gameBoard.board);
+    item.forEach((item, index) => {
+        item.addEventListener('click', (event) => {
+            games.pushInArray(index);
+            addTexToItem(event);
+            console.log(`activePlayer: ${games.getActivePlayer().name}`);
+            console.log(games.gamePlace);
+            console.log(gameBoard.board);
+        })
     })
-}) 
 
-const form = document.getElementById('form');
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    createUser();
-    gameControl();
-})
+    const form = document.getElementById('form');
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        createUser();
+        gameControl();
+        // console.log(createUser().players)
+        // form.reset();
+    })
+
+    function addTexToItem (event) {
+        const target = event.target;
+        const index = target.id;
+        target.textContent = controlBoard[index];
+    }
+
+    const playAgain = document.querySelector('.reset');
+
+    playAgain.addEventListener('click', () => {
+        const winnerDet = winnerDetection();
+        console.log(winnerDet.returnWinner());
+    })
+
+}
+
+screen();
 
 
