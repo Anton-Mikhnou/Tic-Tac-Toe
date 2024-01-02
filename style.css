@@ -108,5 +108,19 @@ form {
     border: 2px solid gold;
 }
 
+.draw {
+    width: 200px;
+    height: 30px;
+    background-color: blueviolet;
+    border: 2px solid red;
+}
+
+.winner {
+    width: 200px;
+    height: 30px;
+    background-color: blueviolet;
+    border: 2px solid green;
+}
+
 
 
