@@ -7,16 +7,19 @@ const gameBoard = {
 }
 
 function createUser () {
-    const playerOne = document.getElementById('userOne').value;
-    const playerTwo = document.getElementById('userTwo').value;
+    const playerOne = document.getElementById('userOne');
+    const playerTwo = document.getElementById('userTwo');
+
+    const playerOneValue = playerOne.value;
+    const playerTwoValue = playerTwo.value;
 
     const players = [
         {
-            name: playerOne,
+            name: playerOneValue,
             token: 'x',
         },
         {
-            name: playerTwo,
+            name: playerTwoValue,
             token: 'o',
         }
     ];
@@ -48,7 +51,7 @@ function gameControl () {
     playerOneName.textContent = user.players[0].name;
     playerTwoName.textContent = user.players[1].name;
 
-    function printActivePlayer () {
+    function printActivePlayer () {                          //================================?
         if (getActivePlayer() === user.players[0]) {
             playerOneName.classList.add('activePlayer');
             playerTwoName.classList.remove('activePlayer');
@@ -74,6 +77,8 @@ function gameControl () {
         printActivePlayer,
         pushInArray,
         getActivePlayer,
+        playerOneName,
+        playerTwoName,
     };
 }
 
@@ -83,39 +88,7 @@ function winnerDetection () {
     let tokenPlayerOne = 'x';
     let tokenPlayerTwo = 'o';
     
-    // function returnWinner () {
-    //     for (let i = 0; i < game.length; i += 3) {
-    //         const newGame = game.slice(i, i + 3);
-    //         if (newGame[i] === newGame[i+1] && newGame[i] === newGame[i+2]) {
-    //             if ( game[i] === tokenPlayerOne) { 
-    //                 return user.players[0].name;
-    //             } else if (game[i] === tokenPlayerTwo) {
-    //                 return user.players[1].name;
-    //             }
-    //         }
-    //     }
-
-    //     for (let i = 0; i < game.length; i++) {
-    //         if (game[i] === game[i+3] && game[i] === game[i+6]) {
-    //             if ( game[i] === tokenPlayerOne) {
-    //                 return user.players[0].name;
-    //             } else if ( game[i] === tokenPlayerTwo) {
-    //                 return user.players[1].name;
-    //             }
-    //         } 
-    //     }
-
-    //     if ((game[0] === game[4] && game[0] === game[8]) || (game[2] === game[4] && game[2] === game[6])) {
-    //         if ( (game[0] === tokenPlayerOne && game[4] === tokenPlayerOne && game[8] === tokenPlayerOne)  || (game[2] === tokenPlayerOne &&  game[4] === tokenPlayerOne &&  game[6] === tokenPlayerOne)) {
-    //             return user.players[0].name;
-    //         } else if ((game[0] === tokenPlayerTwo && game[4] === tokenPlayerTwo && game[8] === tokenPlayerTwo)  || (game[2] === tokenPlayerTwo &&  game[4] === tokenPlayerTwo &&  game[6] === tokenPlayerTwo)) {
-    //             return user.players[1].name;
-    //         }
-    //     } 
-    //     return 'draw';
-    // }
     function returnWinner() {
-        // Проверка по горизонтали
         for (let i = 0; i < game.length; i += 3) {
             if (game[i] === game[i + 1] && game[i] === game[i + 2]) {
                 if (game[i] === tokenPlayerOne) {
@@ -126,7 +99,6 @@ function winnerDetection () {
             }
         }
     
-        // Проверка по вертикали
         for (let i = 0; i < 3; i++) {
             if (game[i] === game[i + 3] && game[i] === game[i + 6]) {
                 if (game[i] === tokenPlayerOne) {
@@ -137,7 +109,6 @@ function winnerDetection () {
             }
         }
     
-        // Проверка по диагоналям
         if ((game[0] === game[4] && game[0] === game[8]) || (game[2] === game[4] && game[2] === game[6])) {
             if (game[4] === tokenPlayerOne) {
                 return user.players[0].name;
@@ -145,7 +116,7 @@ function winnerDetection () {
                 return user.players[1].name;
             }
         }
-    
+
         return 'draw';
     }
     
@@ -153,21 +124,6 @@ function winnerDetection () {
        returnWinner,
     }
 }
-
-// function addWinnerSyle () {
-//     const winnerDet = winnerDetection()
-//     const game = gameControl();
-//     const playerOne = game.playerOneName;
-//     const playerTwo = game.playerTwoName;
-//     if (winnerDet.returnWinner === 'Nobody') {
-//         playerOne.classList.remove('activePlayer');
-//         playerTwo.classList.remove('activePlayer');
-//         playerOne.classList.add('draw');
-//         playerTwo.classList.add('draw');
-//     }
-// }
-
-
 
 function screen () {
     const controlBoard = gameBoard.board;
@@ -190,25 +146,25 @@ function screen () {
     createGridElements();
 
     function addWinnerStyle () {
+        const users = createUser();
         const winnerDet = winnerDetection();
-        const game = gameControl();
-        const playerOne = game.playerOneName;
-        const playerTwo = game.playerTwoName;
         const winner = winnerDet.returnWinner();
-
-        if (winner !== undefined) {
-            if (winner === users.players[0].name) {
-                playerOne.classList.remove('activePlayer');
-                playerOne.classList.add('winner');
-            } else if (winner === users.players[1].name) {
-                playerTwo.classList.remove('activePlayer');
-                playerTwo.classList.add('winner');
-            }
+        
+        if (winner === users.players[0].name) {
+            games.playerOneName.classList.remove('activePlayer');
+            games.playerOneName.classList.add('winner');
+            games.playerTwoName.classList.remove('activePlayer');
+            games.playerTwoName.classList.add('draw');
+        } else if (winner === users.players[1].name) {
+            games.playerTwoName.classList.remove('activePlayer');
+            games.playerTwoName.classList.add('winner');
+            games.playerOneName.classList.remove('activePlayer');
+            games.playerOneName.classList.add('draw');
         } else {
-            playerOne.classList.remove('activePlayer');
-            playerTwo.classList.remove('activePlayer');
-            playerOne.classList.add('draw');
-            playerTwo.classList.add('draw');
+            games.playerOneName.classList.remove('activePlayer');
+            games.playerTwoName.classList.remove('activePlayer');
+            games.playerOneName.classList.add('draw');
+            games.playerTwoName.classList.add('draw');
         }
     }
 
@@ -218,6 +174,8 @@ function screen () {
         item.addEventListener('click', (event) => {
             games.pushInArray(index);
             addTexToItem(event);
+            const winnerDet = winnerDetection();
+            console.log(winnerDet.returnWinner());
             console.log(`activePlayer: ${games.getActivePlayer().name}`);
             console.log(games.gamePlace);
             console.log(gameBoard.board);
@@ -243,9 +201,10 @@ function screen () {
     const playAgain = document.querySelector('.reset');
 
     playAgain.addEventListener('click', () => {
-        const winnerDet = winnerDetection();
-        console.log(winnerDet.returnWinner());
-        addWinnerStyle(users);
+        addWinnerStyle();
+        // const winnerDet = winnerDetection();
+        // console.log(winnerDet.returnWinner());
+        // addWinnerStyle(users);
     })
 
     return {
