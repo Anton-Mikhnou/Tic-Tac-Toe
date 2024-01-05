@@ -51,7 +51,7 @@ function gameControl () {
     playerOneName.textContent = user.players[0].name;
     playerTwoName.textContent = user.players[1].name;
 
-    function printActivePlayer () {                          //================================?
+    function printActivePlayer () {
         if (getActivePlayer() === user.players[0]) {
             playerOneName.classList.add('activePlayer');
             playerTwoName.classList.remove('activePlayer');
@@ -60,8 +60,14 @@ function gameControl () {
             playerOneName.classList.remove('activePlayer');
         }
     }
+    //============================================================================
+    const reset = () => {
+        activePlayer = user.players[0];
+        printActivePlayer();
+    };
 
     const gamePlace = gameBoard.board;
+
     function pushInArray (index) {
         if (gamePlace[index] === '') {
             gamePlace.splice(index, 1, getActivePlayer().token);
@@ -74,6 +80,7 @@ function gameControl () {
 
     return {
         gamePlace,
+        reset,
         printActivePlayer,
         pushInArray,
         getActivePlayer,
@@ -128,8 +135,10 @@ function winnerDetection () {
 function screen () {
     const controlBoard = gameBoard.board;
     const users = createUser(); //=============================================
-    // const user1 = createUser();
+    let gameOver = false;
+
     const games = gameControl();
+
 
     const gridBoard = document.querySelector('.gridBoard');
     const row = 3;
@@ -137,7 +146,7 @@ function screen () {
 
     function createGridElements () {
         for( let i = 0; i < row*column; i++) {
-            gridDiv = document.createElement('div');
+            const gridDiv = document.createElement('div');
             gridDiv.classList.add('item');
             gridDiv.id = i;
             gridBoard.appendChild(gridDiv);
@@ -147,38 +156,44 @@ function screen () {
 
     function addWinnerStyle () {
         const users = createUser();
+        console.log('users:', users)
         const winnerDet = winnerDetection();
         const winner = winnerDet.returnWinner();
+
+        const allElemensNoEmpaty = controlBoard.every(element => element !== '');
         
         if (winner === users.players[0].name) {
             games.playerOneName.classList.remove('activePlayer');
             games.playerOneName.classList.add('winner');
             games.playerTwoName.classList.remove('activePlayer');
             games.playerTwoName.classList.add('draw');
+            gameOver = true;
         } else if (winner === users.players[1].name) {
             games.playerTwoName.classList.remove('activePlayer');
             games.playerTwoName.classList.add('winner');
             games.playerOneName.classList.remove('activePlayer');
             games.playerOneName.classList.add('draw');
-        } else {
+            gameOver = true;
+        } else if (winner !== users.players[0].name && winner !== users.players[1].name && allElemensNoEmpaty) {
             games.playerOneName.classList.remove('activePlayer');
             games.playerTwoName.classList.remove('activePlayer');
             games.playerOneName.classList.add('draw');
             games.playerTwoName.classList.add('draw');
+            gameOver = true;
         }
     }
 
     const item = document.querySelectorAll('.item');
-
     item.forEach((item, index) => {
         item.addEventListener('click', (event) => {
-            games.pushInArray(index);
-            addTexToItem(event);
-            const winnerDet = winnerDetection();
-            console.log(winnerDet.returnWinner());
-            console.log(`activePlayer: ${games.getActivePlayer().name}`);
-            console.log(games.gamePlace);
-            console.log(gameBoard.board);
+            if(!gameOver) {
+                games.pushInArray(index);
+                addTextToItem(event);
+                addWinnerStyle();
+                // console.log(`activePlayer: ${games.getActivePlayer().name}`);
+                console.log(games.gamePlace);
+                console.log(gameBoard.board);
+            }
         })
     })
 
@@ -188,11 +203,9 @@ function screen () {
         e.preventDefault();
         createUser();
         gameControl();
-        // console.log(createUser().players)
-        // form.reset();
     })
 
-    function addTexToItem (event) {
+    function addTextToItem (event) {
         const target = event.target;
         const index = target.id;
         target.textContent = controlBoard[index];
@@ -200,16 +213,27 @@ function screen () {
 
     const playAgain = document.querySelector('.reset');
 
-    playAgain.addEventListener('click', () => {
-        addWinnerStyle();
-        // const winnerDet = winnerDetection();
-        // console.log(winnerDet.returnWinner());
-        // addWinnerStyle(users);
-    })
+    function restart () {
+        gameOver = false;
+        games.reset();
+        games.playerOneName.classList.remove('winner');
+        games.playerTwoName.classList.remove('winner');
+        games.playerOneName.classList.remove('draw');
+        games.playerTwoName.classList.remove('draw');
 
-    return {
-        addWinnerStyle,
+        item.forEach(item => {
+            item.innerHTML = '';
+        })
+
+        for (let i = 0; i <games.gamePlace.length; i++) {
+            games.gamePlace[i] = '';
+        }
     }
+
+
+    playAgain.addEventListener('click', () => {
+       restart();
+    })
 
 }
 
