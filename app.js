@@ -60,7 +60,7 @@ function gameControl () {
             playerOneName.classList.remove('activePlayer');
         }
     }
-    //============================================================================
+    
     const reset = () => {
         activePlayer = user.players[0];
         printActivePlayer();
@@ -134,11 +134,10 @@ function winnerDetection () {
 
 function screen () {
     const controlBoard = gameBoard.board;
-    const users = createUser(); //=============================================
+    let user = createUser(); 
     let gameOver = false;
 
     const games = gameControl();
-
 
     const gridBoard = document.querySelector('.gridBoard');
     const row = 3;
@@ -155,26 +154,24 @@ function screen () {
     createGridElements();
 
     function addWinnerStyle () {
-        const users = createUser();
-        console.log('users:', users)
         const winnerDet = winnerDetection();
         const winner = winnerDet.returnWinner();
 
         const allElemensNoEmpaty = controlBoard.every(element => element !== '');
         
-        if (winner === users.players[0].name) {
+        if (winner === user.players[0].name) {
             games.playerOneName.classList.remove('activePlayer');
             games.playerOneName.classList.add('winner');
             games.playerTwoName.classList.remove('activePlayer');
             games.playerTwoName.classList.add('draw');
             gameOver = true;
-        } else if (winner === users.players[1].name) {
+        } else if (winner === user.players[1].name) {
             games.playerTwoName.classList.remove('activePlayer');
             games.playerTwoName.classList.add('winner');
             games.playerOneName.classList.remove('activePlayer');
             games.playerOneName.classList.add('draw');
             gameOver = true;
-        } else if (winner !== users.players[0].name && winner !== users.players[1].name && allElemensNoEmpaty) {
+        } else if (winner !== user.players[0].name && winner !== user.players[1].name && allElemensNoEmpaty) {
             games.playerOneName.classList.remove('activePlayer');
             games.playerTwoName.classList.remove('activePlayer');
             games.playerOneName.classList.add('draw');
@@ -190,9 +187,6 @@ function screen () {
                 games.pushInArray(index);
                 addTextToItem(event);
                 addWinnerStyle();
-                // console.log(`activePlayer: ${games.getActivePlayer().name}`);
-                console.log(games.gamePlace);
-                console.log(gameBoard.board);
             }
         })
     })
@@ -203,6 +197,7 @@ function screen () {
         e.preventDefault();
         createUser();
         gameControl();
+        form.reset()
     })
 
     function addTextToItem (event) {
@@ -220,6 +215,8 @@ function screen () {
         games.playerTwoName.classList.remove('winner');
         games.playerOneName.classList.remove('draw');
         games.playerTwoName.classList.remove('draw');
+        games.playerOneName.innerHTML = '';
+        games.playerTwoName.innerHTML = '';
 
         item.forEach(item => {
             item.innerHTML = '';
@@ -229,7 +226,6 @@ function screen () {
             games.gamePlace[i] = '';
         }
     }
-
 
     playAgain.addEventListener('click', () => {
        restart();
